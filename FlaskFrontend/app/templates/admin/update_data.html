@@ -1,0 +1,147 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+<style>
+    /* Container styling */
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+
+    /* Header styling */
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    /* Buttons styling */
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        flex: 1 1 45%;
+        padding: 15px 0;
+        margin: 10px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s, color 0.3s;
+        text-align: center;
+    }
+
+    .btn-crawl-tiki {
+        background-color: #4CAF50;
+        color: #fff;
+    }
+
+    .btn-crawl-tiki:hover {
+        background-color: #d4ffd4;
+        color: #333;
+    }
+
+    .btn-crawl-lazada {
+        background-color: #4CAF50;
+        color: #fff;
+    }
+
+    .btn-crawl-lazada:hover {
+        background-color: #d4ffd4;
+        color: #333;
+    }
+
+    .btn-load-tiki {
+        background-color: #FF9800;
+        color: #fff;
+    }
+
+    .btn-load-tiki:hover {
+        background-color: #ffe0b2;
+        color: #333;
+    }
+
+    .btn-load-lazada {
+        background-color: #FF9800;
+        color: #fff;
+    }
+
+    .btn-load-lazada:hover {
+        background-color: #ffe0b2;
+        color: #333;
+    }
+
+    .btn-create-index {
+        background-color: #f44336;
+        color: #fff;
+        flex: 1 1 100%;
+    }
+
+    .btn-create-index:hover {
+        background-color: #f7b2a3;
+        color: #333;
+    }
+</style>
+
+<div class="container">
+    {% if success_message %}
+    <script>alert('{{ success_message }}');</script>
+    {% endif %}
+    <h2>{% block title %}Cập nhật dữ liệu{% endblock %}</h2>
+    <form id="actionForm" method="POST">
+        <!-- Trường ẩn để lưu trữ action -->
+        <input type="hidden" id="action" name="action" value="">
+        
+        <div class="button-group">
+            <button type="button" class="btn btn-crawl-tiki" onclick="performAction('crawl_tiki')">Crawl Tiki</button>
+            <button type="button" class="btn btn-crawl-lazada" onclick="performAction('crawl_lazada')">Crawl Lazada</button>
+            <button type="button" class="btn btn-load-tiki" onclick="performAction('load_tiki')">Cập nhật dữ liệu Tiki</button>
+            <button type="button" class="btn btn-load-lazada" onclick="performAction('load_lazada')">Cập nhật dữ liệu Lazada</button>
+            <button type="button" class="btn btn-create-index" onclick="performAction('create_index')">Tạo chỉ mục</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Hàm để thực hiện hành động
+    function performAction(action) {
+        let confirmMessage = '';
+        switch(action) {
+            case 'crawl_tiki':
+                confirmMessage = 'Bạn có chắc chắn muốn crawl dữ liệu từ Tiki không?';
+                break;
+            case 'crawl_lazada':
+                confirmMessage = 'Bạn có chắc chắn muốn crawl dữ liệu từ Lazada không?';
+                break;
+            case 'load_tiki':
+                confirmMessage = 'Bạn có chắc chắn muốn cập nhật dữ liệu Tiki không?';
+                break;
+            case 'load_lazada':
+                confirmMessage = 'Bạn có chắc chắn muốn cập nhật dữ liệu Lazada không?';
+                break;
+            case 'create_index':
+                confirmMessage = 'Bạn có chắc chắn muốn tạo chỉ mục không?';
+                break;
+            default:
+                confirmMessage = 'Bạn có chắc chắn muốn thực hiện hành động này không?';
+        }
+
+        if (confirm(confirmMessage)) {
+            // Thiết lập giá trị action và submit form
+            document.getElementById('action').value = action;
+            document.getElementById('actionForm').submit();
+        }
+    }
+</script>
+{% endblock %}

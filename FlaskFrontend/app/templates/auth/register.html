@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="post">
+    <h1>{% block title %}Đăng ký{% endblock %}</h1>
+    <label for="username">Tên đăng nhập</label>
+    <input type="text" name="username" id="username" required>
+    <label for="password">Mật khẩu</label>
+    <input type="password" name="password" id="password" required>
+    <label for="repeat-password">Nhập lại mật khẩu</label>
+    <input type="password" name="repeat-password" id="repeat-password" required>
+    <input type="submit" value="Đăng ký">
+  </form>
+{% endblock %}

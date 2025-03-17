@@ -1,0 +1,382 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* Light gray background for contrast */
+    color: #333; /* Dark text for readability */
+    line-height: 1.6;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #4CAF50; /* Vibrant green for the navbar */
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+}
+
+nav h1 {
+    margin: 0;
+    font-size: 28px; /* Increased font size */
+    flex: 1;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    font-size: 18px; /* Increased font size */
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+    padding: 8px 16px; /* Increased padding for button-like appearance */
+    border-radius: 4px;
+    background-color: #4CAF50; /* Matching background */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #d4ffd4; /* Light green on hover for better visibility */
+    color: #333;
+}
+
+.nav-center {
+    flex: 2;
+    text-align: center;
+}
+
+.nav-center form {
+    display: flex;
+    flex-direction: row;      /* Ensure items are laid out horizontally */
+    align-items: center;      /* Vertically center input and button */
+    justify-items: center;  /* Center them horizontally within the form area */
+}
+
+.nav-center input[type="text"] {
+    display: inline-flex;
+    align-items: center;
+    justify-items: left;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    width: 600px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    
+    /* Placeholder styling */
+    ::placeholder {
+        color: #999;
+        font-style: italic;
+    }
+
+    margin-bottom: 0px;
+}
+
+.nav-center button {
+    display: inline-flex;
+    align-items: center;
+    justify-items: center;
+    padding: 8px 12px;
+    border: 1px solid #ccc; /* Matching border color */
+    border-left: none;
+    background-color: #007BFF; /* Primary color for button */
+    color: #fff; /* White text */
+    transition: background-color 0.3s, transform 0.2s;
+    background-color: #fff;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    height: 100%; /* Make the button match the input's height */
+}
+
+.nav-center button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    border: 2px solid #0056b3;
+}
+
+.nav-center button:active {
+    transform: scale(0.98); /* Slightly shrink on click */
+}
+
+.nav-center button img {
+    width: 18px; 
+    height: 18px;
+    margin-left: 5px; /* Space between text and icon */
+}
+
+/* Content Section */
+.content {
+    width: 100%;
+    margin: auto;
+    padding: 25px;
+    background-color: #fff; /* White background for content area */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.content > form > h1 {
+    margin-bottom: 20px;
+    font-size: 32px; /* Increased font size */
+    color: #4CAF50; /* Matching green for headers */
+}
+
+/* Flash Messages */
+.flash {
+    background-color: #ffdddd; /* Light red background for errors */
+    border-left: 6px solid #f44336; /* Red border for emphasis */
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 3px;
+}
+
+/* Forms Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 16px; /* Increased font size */
+}
+
+form input[type="text"],
+form input[type="password"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+form input[type="submit"] {
+    padding: 12px;
+    border: none;
+    background-color: #4CAF50; /* Green button */
+    color: #fff;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Increased font size */
+    transition: background-color 0.3s;
+}
+
+form input[type="submit"]:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Links Styling */
+a {
+    color: #4CAF50;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 18px; /* Increased font size for links */
+}
+
+a:hover {
+    color: #388e3c; /* Dark green on hover */
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .nav-center {
+        width: 100%;
+        margin: 10px 0;
+    }
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+    }
+    nav ul li {
+        width: 100%;
+    }
+    nav ul li a {
+        width: 100%;
+        text-align: center;
+    }
+    .content {
+        margin: 20px;
+        padding: 20px;
+    }
+}
+
+/* Header Block Styles */
+
+.category-container {
+    width: 100%;
+    background-color: #f8f8f8; /* Light background color */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.category-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
+    overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+}
+
+.category-row:last-child {
+    margin-bottom: 0;
+}
+
+.category-row h2 {
+    margin-right: 20px;
+    font-size: 1.5em;
+    color: #333;
+    white-space: nowrap; /* Prevent the heading from wrapping */
+}
+
+/* Header Block Styles */
+
+.category-container {
+    width: 100%;
+    background-color: #f8f8f8; /* Light background color */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.category-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
+    overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+    overflow-y: hidden; /* Prevent vertical scroll */
+}
+
+/* Optionally, you can add padding-bottom to prevent clipping */
+.category-row {
+    padding-bottom: 10px;
+}
+
+.category-row:last-child {
+    margin-bottom: 0;
+}
+
+.category-row h2 {
+    margin-right: 20px;
+    font-size: 1.5em;
+    color: #333;
+    white-space: nowrap; /* Prevent the heading from wrapping */
+}
+
+/* Header Container */
+.header-container {
+width: 100%;
+position: relative;
+font-family: Arial, sans-serif;
+display: inline-block; /* Adjust as needed */
+}
+
+/* Main Header Line */
+.header-title {
+padding: 15px 20px;
+background-color: #4CAF50;
+color: #fff;
+cursor: pointer;
+font-size: 1.5em;
+font-weight: bold;
+border-bottom: 2px solid #4CAF50;
+transition: background-color 0.3s;
+}
+
+.header-title:hover {
+background-color: #d4ffd4;
+color: #333;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+visibility: hidden; /* Changed from display: none */
+opacity: 0;
+transition: opacity 0.3s ease, visibility 0.3s ease;
+position: absolute;
+top: 100%;
+left: 0;
+background-color: #ffffff;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+z-index: 1000;
+padding: 20px;
+box-sizing: border-box;
+width: 100%; /* Adjust as needed */
+}
+
+/* Show Dropdown on Hover */
+.header-container:hover .dropdown-menu {
+visibility: visible; /* Changed from display: block */
+opacity: 1;
+}
+
+/* Category Rows */
+.category-row {
+margin-bottom: 20px;
+}
+
+.category-row:last-child {
+margin-bottom: 0;
+}
+
+.category-row h2 {
+font-size: 1.5em;
+color: #333;
+margin-bottom: 10px;
+border-bottom: 1px solid #e0e0e0;
+padding-bottom: 5px;
+}
+
+.category-row a {
+display: inline-block;
+margin-right: 15px;
+margin-bottom: 8px;
+text-decoration: none;
+color: #000;
+font-size: 1.2em;
+padding: 5px 10px;
+border-radius: 4px;
+transition: background-color 0.3s, color 0.3s;
+}
+
+.category-row a:hover {
+background-color: #f0f0f0;
+color: #4CAF50;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+.dropdown-menu {
+    width: 100%;
+    min-width: 100%;
+}
+
+.category-row a {
+    margin-right: 0;
+}
+}

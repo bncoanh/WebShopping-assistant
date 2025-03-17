@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+
+{% block search %}
+<form method="get" action="/search">
+    <input type="text" name="query" placeholder="Tìm kiếm sản phẩm" required>
+    <button type="submit">
+        <img src="{{ url_for('static', filename='search.png') }}" alt="Search">
+    </button>
+  </form>
+{% endblock %}
+
+{% block header %}
+  <div class="header-container">
+    <div class="header-title">
+      <img src="{{ url_for('static', filename='menu.svg') }}" alt="Menu">
+      Danh mục sản phẩm
+    </div>
+    <div class="dropdown-menu">
+      <!-- Row for Tiki categories -->
+      <div class="category-row">
+        <h2>Tiki</h2>
+        {% for category in categories_tiki %}
+          <a href="{{ url_for('main.category', name=category['name'], categoryId=category['categoryId'], origin='tiki', page=1) }}">
+            {{ category['name'] }}
+          </a>
+        {% endfor %}
+      </div>
+      
+      <!-- Row for Lazada categories -->
+      <div class="category-row">
+        <h2>Lazada</h2>
+        {% for category in categories_lazada %}
+          <a href="{{ url_for('main.category', name=category['name'], categoryId=category['categoryId'], origin='lazada', page=1) }}">
+            {{ category['name'] }}
+          </a>
+        {% endfor %}
+      </div>
+
+      <!-- Add additional category rows here if needed -->
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <style>
+    /* Product Detail Container */
+    .product-detail-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+    }
+
+    /* Product Image */
+    .product-detail-image {
+      flex: 1 1 400px;
+      max-width: 400px;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 20px;
+    }
+
+    /* Product Information */
+    .product-info {
+      flex: 2 1 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-name {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #333333;
+    }
+
+    .product-price {
+      font-size: 24px;
+      color: #e91e63;
+      margin-bottom: 10px;
+    }
+
+    .product-quantity {
+      font-size: 16px;
+      color: #757575;
+      margin-bottom: 10px;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .product-rating img {
+      width: 20px;
+      height: 20px;
+      margin-left: 5px;
+    }
+
+    .product-summary {
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .product-review {
+      font-size: 16px;
+      color: #757575;
+      margin-bottom: 10px;
+    }
+
+    .product-origin,
+    .product-brand,
+    .product-seller {
+      font-size: 16px;
+      color: #9e9e9e;
+      margin-bottom: 10px;
+    }
+
+    .purchase-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #e91e63;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .purchase-button:hover {
+      background-color: #c2185b;
+      color: #ffffff;
+    }
+
+    /* Các sản phẩm tương tự Heading */
+    .related-products-heading {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 40px 20px 20px 20px;
+      color: #333333;
+    }
+
+    /* Related Products Grid */
+    .related-products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Increased min width */
+        gap: 20px;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #f5f5f5;
+    }
+
+    /* Related Product Card */
+    .related-product-card {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .related-product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Related Product Image */
+    .related-product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background-color: #fafafa;
+    }
+
+    /* Related Product Details */
+    .related-product-details {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .related-product-name {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;  
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      flex-grow: 1;
+    }
+
+    .related-product-price {
+      font-size: 18px;
+      color: #e91e63;
+      margin-bottom: 10px;
+    }
+
+    .related-product-quantity {
+      font-size: 14px;
+      color: #757575;
+      margin-bottom: 10px;
+    }
+
+    .related-product-rating {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .related-product-rating img {
+      width: 16px;
+      height: 16px;
+      margin-left: 5px;
+    }
+
+    .related-product-review {
+      font-size: 14px;
+      color: #757575;
+    }
+    .related-product-origin {
+    font-size: 12px;
+    color: #9e9e9e;
+    margin-top: auto;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .product-detail-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .product-detail-image {
+        margin-right: 0;
+        margin-bottom: 20px;
+        max-width: 100%;
+      }
+
+      .product-info {
+        align-items: center;
+        text-align: center;
+      }
+
+      .related-products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      }
+    }
+
+    @media (max-width: 576px) {
+      .related-products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+    }
+  </style>
+
+  <!-- Product Detail Section -->
+  <div class="product-detail-container">
+    {% if product %}
+    <img src="{{ product['imgURL'] }}" alt="{{ product['name'] }}" class="product-detail-image">
+    <div class="product-info">
+      <div class="product-name">{% block title %} {{ product['name'] }} {% endblock %}</div>
+      <div class="product-price">{{ product['price'] }} đ</div>
+      <div class="product-quantity">Đã bán: {{ product['quantitySold'] }}</div>
+      <div class="product-rating">
+        <span>{{ product['rating'] }}</span>
+        <img src="{{ url_for('static', filename='rating.svg') }}" alt="Star Rating">
+      </div>
+      <div class="product-review">{{ product['reviewCount'] }} lượt đánh giá</div>
+
+      <div class="product-origin">Nơi bán: {{ product['origin'] }}</div>
+      <div class="product-brand">Thương hiệu: {{ product['brandName'] }}</div>
+      <div class="product-seller">Cửa hàng: {{ product['sellerName'] }}</div>
+      {% if summary %}
+      <div class="product-summary">Hệ thống tóm tắt sản phẩm:<br>{{ summary | safe  }}</div>
+      {% endif %}
+      <a href="{{ product['link'] }}" target="_blank" data-track-url="{{ url_for('main.track_product', productId=product['productId'], origin=product['origin']) }}" class="purchase-button">Đến nơi bán</a>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Related Products Section -->
+  <h1 class="related-products-heading">Các sản phẩm tương tự</h1>
+  
+  <div class="related-products-grid">
+    {% for related_product in recommended_products %}
+      <a href="{{ url_for('main.product', productId=related_product['productId'], origin=related_product['origin']) }}" class="related-product-card">
+        <img src="{{ related_product['imgURL'] }}" alt="{{ related_product['name'] }}" class="related-product-image">
+        <div class="related-product-details">
+          <div class="related-product-name" title="{{ related_product['name'] }}">{{ related_product['name'] }}</div>
+          <div class="related-product-price">{{ related_product['price'] }} đ</div>
+          <div class="related-product-quantity">Đã bán: {{ related_product['quantitySold'] }}</div>
+          <div class="related-product-rating">
+            <span>{{ related_product['rating'] }}</span>
+            <img src="{{ url_for('static', filename='rating.svg') }}" alt="Star Rating">
+          </div>
+          <div class="related-product-review">{{ related_product['reviewCount'] }} lượt đánh giá</div>
+          <div class="related-product-origin">Nơi bán: {{ product['origin'] }}</div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const purchaseButtons = document.querySelectorAll('.purchase-button');
+      purchaseButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+          const trackUrl = button.getAttribute('data-track-url');
+          if (trackUrl) {
+            // Send tracking request
+            fetch(trackUrl, { method: 'POST', keepalive: true })
+              .then(response => {
+                if (!response.ok) {
+                  console.error('Tracking request failed:', response.status);
+                } else {
+                  console.log('Tracking request successful');
+                }
+              })
+              .catch(function(error) {
+                console.error('Error tracking product:', error);
+              });
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}
+

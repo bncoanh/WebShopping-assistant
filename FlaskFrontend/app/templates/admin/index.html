@@ -1,0 +1,8 @@
+{% extends 'admin_base.html' %}
+{% block title %}Trang quản trị{% endblock %}
+
+{% block content %}
+{% if not g.username or not g.is_admin %}
+    <div class="flash">Bạn cần đăng nhập để thực hiện các chức năng của người quản trị</div>
+{% endif %}
+{% endblock %}

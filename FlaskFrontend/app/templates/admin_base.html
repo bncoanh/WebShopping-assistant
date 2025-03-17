@@ -1,0 +1,79 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} - ShoppingAssistant</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% block head %}{% endblock %}
+<style>
+.header-links {
+  display: flex;
+  width: 100%;
+}
+.header-link {
+  flex: 1; /* Each link takes up half the width */
+  text-align: center;
+  padding: 15px 0;
+  background-color: #4CAF50;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2em;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header-link:hover {
+  background-color: #d4ffd4;
+  color: #333;
+}
+@media (max-width: 768px) {
+  .header-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .header-link {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .header-links {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .header-link {
+    width: auto;
+  }
+}
+
+
+</style>
+<nav>
+  <h1>ShoppingAssistantAdmin</h1>
+  
+  <ul>
+    {% if g.username and g.is_admin %}
+      <li><span>{{ g.username }}</span></li>
+      <li><a href="{{ url_for('admin.index') }}">Trang chủ</a></li>
+      <li><a href="{{ url_for('auth.admin_change_password') }}">Đổi mật khẩu</a></li>
+      <li><a href="{{ url_for('auth.logout') }}">Đăng xuất</a></li>
+    {% else %}
+      <li><a href="{{ url_for('admin.index') }}">Trang chủ</a></li>
+      <li><a href="{{ url_for('auth.admin_login') }}">Đăng nhập</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% if g.username and g.is_admin %}
+<header>
+  <!-- New Header Links Section -->
+  <div class="header-links">
+    <a href="{{ url_for('admin.users_management') }}" class="header-link">Bảo trì tài khoản người dùng</a>
+    <a href="{{ url_for('admin.update_data') }}" class="header-link">Cập nhật dữ liệu</a>
+  </div>
+</header>
+{% endif %}
+<section class="content">
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>

@@ -1,0 +1,193 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+<style>
+    /* Container styling */
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+
+    /* Input fields styling */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 8px 12px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    /* Buttons styling */
+    .btn {
+        padding: 10px 20px;
+        margin-right: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-add {
+        background-color: #4CAF50;
+        color: #fff;
+    }
+
+    .btn-add:hover {
+        background-color: #d4ffd4;
+        color: #333;
+    }
+
+    .btn-edit {
+        background-color: #4CAF50;
+        color: #fff;
+    }
+
+    .btn-edit:hover {
+        background-color: #d4ffd4;
+        color: #333;
+    }
+
+    .btn-delete {
+        background-color: #4CAF50;
+        color: #fff;
+    }
+
+    .btn-delete:hover {
+        background-color: #d4ffd4;
+        color: #333;
+    }
+
+    /* Table styling */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+</style>
+
+<div class="container">
+    {% if success_message %}
+    <script>alert('{{ success_message }}');</script>
+    {% endif %}
+    <h2>{% block title %}Bảo trì tài khoản người dùng{% endblock %}</h2>
+    <input type="hidden" id="accountId" name="accountId" value="">
+    <div class="form-group">
+        <label for="username">Tên người dùng:</label>
+        <input type="text" id="username" name="username" placeholder="Nhập tên người dùng">
+    </div>
+    <div class="form-group">
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu">
+    </div>
+    <div class="button-group">
+        <button class="btn btn-add" onclick="addUser()">Thêm người dùng</button>
+        <button class="btn btn-edit" onclick="editUser()">Sửa người dùng</button>
+        <button class="btn btn-delete" onclick="deleteUser()">Xóa người dùng</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên người dùng</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr onclick="selectUser('{{ user.username }}', '{{ user.accountId }}')">
+                <td>{{ user.accountId }}</td>
+                <td>{{ user.username }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Hàm để thêm người dùng
+    function addUser() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (!username || !password) {
+            alert('Vui lòng nhập đầy đủ tên người dùng và mật khẩu.');
+            return;
+        }
+
+        const url = "{{ url_for('admin.add_user') }}" + "?username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
+        window.location.href = url;
+    }
+
+    // Hàm để sửa người dùng
+    function editUser() {
+        const accountId = document.getElementById('accountId').value;
+        const password = document.getElementById('password').value.trim();
+
+        if (!accountId || !password) {
+            alert('Vui lòng chọn 1 người dùng trong bảng để chỉnh sửa.');
+            return;
+        }
+
+        if (confirm('Bạn có chắc chắn muốn sửa người dùng này không?')) {
+            const url = "{{ url_for('admin.change_user') }}" + "?accountId=" + encodeURIComponent(accountId) + "&password=" + encodeURIComponent(password);
+            window.location.href = url;
+        }
+    }
+
+    // Hàm để xóa người dùng
+    function deleteUser() {
+        const accountId = document.getElementById('accountId').value;
+
+        if (!accountId) {
+            alert('Vui lòng chọn 1 người dùng trong bảng để xóa.');
+            return;
+        }
+
+        if (confirm('Bạn có chắc chắn muốn xóa người dùng này không?')) {
+            const url = "{{ url_for('admin.delete_user') }}" + "?accountId=" + encodeURIComponent(accountId);
+            window.location.href = url;
+        }
+    }
+
+    // Hàm để chọn người dùng từ bảng
+    function selectUser(username, accountId) {
+        document.getElementById('username').value = username;
+        document.getElementById('accountId').value = accountId;
+        document.getElementById('password').value = '';
+        // Tùy chọn: bạn có thể thêm logic để hiển thị thêm thông tin người dùng khác nếu cần
+    }
+</script>
+{% endblock %}
